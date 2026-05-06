@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QHC GLOBAL — Event Location</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-deep:    #0d2818;
+    --green-mid:     #1a4731;
+    --green-light:   #2a6848;
+    --green-accent:  #3d8f61;
+    --gold-deep:     #7d5a1e;
+    --gold-mid:      #b8882e;
+    --gold-bright:   #d4a843;
+    --gold-light:    #f0c96a;
+    --gold-shimmer:  #fde9a2;
+    --cream:         #fdf6e3;
+    --text-light:    rgba(253,230,162,0.85);
+  }
+
+  html, body {
+    min-height: 100%;
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    background: var(--green-deep);
+    overflow-x: hidden;
+  }
+
+  /* ── Background ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(61,143,97,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 10% 80%,  rgba(26,71,49,0.6)  0%, transparent 55%),
+      radial-gradient(ellipse 50% 50% at 90% 90%,  rgba(184,136,46,0.18) 0%, transparent 55%),
+      linear-gradient(170deg, #0a2014 0%, #112b1e 35%, #0d2818 65%, #0a1e10 100%);
+    z-index: 0;
+  }
+
+  /* subtle noise overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── Page wrapper ── */
+  .page {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100dvh;
+    padding: 60px 24px 48px;
+  }
+
+  /* ── Ornamental top line ── */
+  .ornament {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 36px;
+    animation: fadeDown 0.9s ease both;
+  }
+  .ornament-line {
+    width: 70px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-bright));
+  }
+  .ornament-line.right {
+    background: linear-gradient(90deg, var(--gold-bright), transparent);
+  }
+  .ornament-diamond {
+    width: 8px; height: 8px;
+    background: var(--gold-bright);
+    transform: rotate(45deg);
+  }
+
+  /* ── Logo ── */
+  .logo-wrap {
+    margin-bottom: 28px;
+    animation: fadeDown 0.9s ease 0.1s both;
+  }
+  .logo-circle {
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(212,168,67,0.5);
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 40% 35%, rgba(61,143,97,0.25), rgba(13,40,24,0.8));
+    box-shadow:
+      0 0 0 6px rgba(212,168,67,0.08),
+      0 0 40px rgba(212,168,67,0.15),
+      inset 0 1px 0 rgba(212,168,67,0.3);
+    position: relative;
+    overflow: hidden;
+  }
+  .logo-circle::after {
+    content: '';
+    position: absolute;
+    top: -40%; left: -40%;
+    width: 80%; height: 80%;
+    background: radial-gradient(circle, rgba(253,233,162,0.2), transparent 70%);
+    border-radius: 50%;
+  }
+  .logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, var(--gold-shimmer), var(--gold-bright), var(--gold-mid));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    text-align: center;
+  }
+
+  /* ── Heading ── */
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 5px;
+    color: var(--gold-bright);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    animation: fadeDown 0.9s ease 0.2s both;
+  }
+
+  .heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(28px, 6vw, 52px);
+    color: var(--cream);
+    letter-spacing: 3px;
+    text-align: center;
+    line-height: 1.25;
+    margin-bottom: 10px;
+    animation: fadeDown 0.9s ease 0.3s both;
+  }
+  .heading em {
+    font-style: italic;
+    background: linear-gradient(135deg, var(--gold-shimmer) 0%, var(--gold-bright) 50%, var(--gold-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 22px auto 40px;
+    width: fit-content;
+    animation: fadeDown 0.9s ease 0.4s both;
+  }
+  .divider-bar { width: 48px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-bright)); }
+  .divider-bar.r { background: linear-gradient(90deg, var(--gold-bright), transparent); }
+  .divider-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold-bright); }
+
+  /* ── Buttons ── */
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 440px;
+    animation: fadeUp 0.9s ease 0.5s both;
+  }
+
+  .loc-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 22px 32px;
+    border-radius: 16px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(.22,.68,0,1.2), box-shadow 0.3s ease;
+  }
+
+  /* Shimmer layer */
+  .loc-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.12) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+  .loc-btn:hover::before { transform: translateX(100%); }
+  .loc-btn:hover { transform: translateY(-3px) scale(1.015); }
+  .loc-btn:active { transform: translateY(0) scale(0.99); }
+
+  /* Green button */
+  .btn-green {
+    background: linear-gradient(135deg, #1e5c38 0%, #2a7a4e 45%, #1e5c38 100%);
+    color: var(--gold-shimmer);
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.45),
+      0 2px 0 rgba(212,168,67,0.25) inset,
+      0 0 0 1px rgba(212,168,67,0.3);
+  }
+  .btn-green:hover {
+    box-shadow:
+      0 14px 44px rgba(0,0,0,0.5),
+      0 2px 0 rgba(212,168,67,0.3) inset,
+      0 0 0 1px rgba(212,168,67,0.5),
+      0 0 20px rgba(42,122,78,0.4);
+  }
+
+  /* Gold button */
+  .btn-gold {
+    background: linear-gradient(135deg, #7d5a1e 0%, #b8882e 40%, #c9992f 60%, #7d5a1e 100%);
+    color: var(--green-deep);
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.45),
+      0 2px 0 rgba(253,233,162,0.3) inset,
+      0 0 0 1px rgba(212,168,67,0.5);
+  }
+  .btn-gold:hover {
+    box-shadow:
+      0 14px 44px rgba(0,0,0,0.5),
+      0 2px 0 rgba(253,233,162,0.35) inset,
+      0 0 0 1px rgba(212,168,67,0.8),
+      0 0 24px rgba(184,136,46,0.5);
+  }
+
+  .btn-icon {
+    font-size: 20px;
+    line-height: 1;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  }
+
+  .btn-label { flex: 1; text-align: left; }
+  .btn-label small {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 3px;
+    opacity: 0.7;
+    font-weight: 400;
+    margin-bottom: 3px;
+  }
+
+  .btn-arrow {
+    font-size: 16px;
+    opacity: 0.6;
+    transition: transform 0.3s ease, opacity 0.3s;
+  }
+  .loc-btn:hover .btn-arrow { transform: translateX(4px); opacity: 1; }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 52px;
+    text-align: center;
+    animation: fadeUp 0.9s ease 0.7s both;
+  }
+  .footer-ornament {
+    display: flex; align-items: center; gap: 12px;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+  .footer-line { flex: 1; max-width: 60px; height: 1px; background: linear-gradient(90deg, transparent, rgba(212,168,67,0.4)); }
+  .footer-line.r { background: linear-gradient(90deg, rgba(212,168,67,0.4), transparent); }
+  .footer-fleur { color: var(--gold-mid); font-size: 14px; }
+
+  .footer-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: rgba(212,168,67,0.65);
+    letter-spacing: 1.5px;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 480px) {
+    .page { padding: 48px 20px 40px; }
+    .logo-circle { width: 90px; height: 90px; }
+    .logo-text { font-size: 18px; }
+    .loc-btn { padding: 20px 22px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Top ornament -->
+  <div class="ornament">
+    <span class="ornament-line"></span>
+    <span class="ornament-diamond"></span>
+    <span class="ornament-diamond" style="width:5px;height:5px;background:var(--gold-light)"></span>
+    <span class="ornament-diamond"></span>
+    <span class="ornament-line right"></span>
+  </div>
+
+  <!-- Logo -->
+  <div class="logo-wrap">
+    <div class="logo-circle">
+      <div class="logo-text">QHC<br>GLOBAL</div>
+    </div>
+  </div>
+
+  <!-- Label + Heading -->
+  <p class="section-label">Signing Ceremony &amp; Inauguration</p>
+  <h1 class="heading"><em>Event Location</em><br>Information</h1>
+
+  <!-- Divider -->
+  <div class="divider">
+    <span class="divider-bar"></span>
+    <span class="divider-dot"></span>
+    <span class="divider-dot" style="width:3px;height:3px;opacity:0.6"></span>
+    <span class="divider-dot"></span>
+    <span class="divider-bar r"></span>
+  </div>
+
+  <!-- Buttons -->
+  <div class="buttons">
+
+    <a class="loc-btn btn-green"
+       href="https://maps.app.goo.gl/dkyubXMUZgusTDEPA"
+       target="_blank" rel="noopener">
+      <span class="btn-icon">📍</span>
+      <span class="btn-label">
+        <small>Venue 01</small>
+        Party Committee Office
+      </span>
+      <span class="btn-arrow">›</span>
+    </a>
+
+    <a class="loc-btn btn-gold"
+       href="https://maps.app.goo.gl/aMTX1aQDqiXBtCBH6"
+       target="_blank" rel="noopener">
+      <span class="btn-icon">📍</span>
+      <span class="btn-label">
+        <small>Venue 02</small>
+        Binh Minh Restaurant
+      </span>
+      <span class="btn-arrow">›</span>
+    </a>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-ornament">
+      <span class="footer-line"></span>
+      <span class="footer-fleur">✦</span>
+      <span class="footer-line r"></span>
+    </div>
+    <p class="footer-text">QHC GLOBAL respectfully invites you</p>
+  </footer>
+
+</div>
+</body>
+</html>
